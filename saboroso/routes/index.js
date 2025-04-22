@@ -19,27 +19,35 @@ router.get('/', function(req, res, next) {
   
 });
 
-router.get('/contacts', function(req, res, next) {
-  res.render('contacts', {
-    title: 'Contato - Restaurante Saboroso'
+router.get('/contact', function(req, res, next) {
+  res.render('contact', {
+    title: 'Contato - Restaurante Saboroso',
+    background: 'images/img_bg_3.jpg',
+    h1: 'Entre em Contato'
   });
 });
 
 router.get('/menus', function(req, res, next) {
-  res.render('menus', {
-    title: 'Menu - Restaurante Saboroso'
+  res.render('menu', {
+    title: 'Menu - Restaurante Saboroso',
+    background: 'images/img_bg_1.jpg',
+    h1: 'Saboreie Nosso Menu'
   });
 });
 
 router.get('/reservations', function(req, res, next) {
   res.render('reservations', {
-    title: 'Reservas - Restaurante Saboroso'
+    title: 'Reservas - Restaurante Saboroso',
+    background: 'images/img_bg_2.jpg',
+    h1: 'Faça sua reserva'
   });
 });
 
 router.get('/services', function(req, res, next) {
   res.render('services', {
-    title: 'Serviços - Restaurante Saboroso'
+    title: 'Serviços - Restaurante Saboroso',
+    background: 'images/img_bg_1.jpg',
+    h1: 'Nossos Serviços'
   });
 });
 
