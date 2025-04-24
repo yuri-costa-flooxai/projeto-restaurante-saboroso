@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
       title: 'Restaurante Saboroso', 
       menus: results 
     });
-  })  
+  });  
 });
 
 router.get('/contact', function(req, res, next) {
@@ -29,11 +29,9 @@ router.post('/contact', function(req, res, next) {
     contacts.render(req, res, "Digite a mensagem");
   } else {
     contacts.save(req.body).then(results => {
-      req.body = {}
+      req.body = {};
       contacts.render(req, res, null, "Mensagem enviada com sucesso");
-
     }).catch(err => {
-
       contacts.render(req, res, err.message, null);
     });
   }
@@ -46,6 +44,7 @@ router.get('/menus', function(req, res, next) {
       background: 'images/img_bg_1.jpg',
       h1: 'Saboreie Nosso Menu',
       menus: results
+    });
   });
 });
 
@@ -66,26 +65,14 @@ router.post('/reservations', function(req, res, next) {
   } else if (!req.body.time) {
     reservations.render(req, res, "Digite a hora");
   } else {
-
     reservations.save(req.body).then(results => {
-
-      req.body = {}
-
+      req.body = {};
       reservations.render(req, res, null, 'Reserva realizada com sucesso');
-
       res.redirect('/reservations');
-
     }).catch(err => {
-
       reservations.render(req, res, err, null);
     });
   }
-  
-  reservations.save(req.body).then(results => {
-    reservations.render(req, res, null, "Reserva realizada com sucesso");
-  }).catch(err => {
-    reservations.render(req, res, err, null);
-  });
 });
 
 router.get('/services', function(req, res, next) {
@@ -95,6 +82,5 @@ router.get('/services', function(req, res, next) {
     h1: 'Nossos Serviços'
   });
 });
-
 
 module.exports = router;
