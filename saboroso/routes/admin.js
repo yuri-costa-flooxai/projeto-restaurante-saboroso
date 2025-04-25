@@ -3,11 +3,24 @@ var router = express.Router();
 var users = require('../inc/users');
 var connection = require('../inc/db');
 
+router.use(function(req, res, next) {
+
+    if (['/login'].indexOf(req.url) === -1 && !req.session.user) {
+        res.redirect('/admin/login');
+    } else {
+        next();
+    }
+
+});
+
 router.get('/', function(req, res, next) {
 
-    res.render('admin/index', {
-        title: 'Admin - Restaurante Saboroso'
-    });
+    res.render('admin/index');
+});
+
+router.get('/logout', function(req, res, next) {
+    delete req.session.user;
+    res.redirect('/admin/login');
 });
 
 router.post('/login', function(req, res, next) {
