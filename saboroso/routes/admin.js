@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var users = require('../inc/users');
+var admin = require('../inc/admin');
 var connection = require('../inc/db');
 
 router.use(function(req, res, next) {
@@ -13,9 +14,18 @@ router.use(function(req, res, next) {
 
 });
 
+router.use(function(req, res, next) {
+    
+    req.menus = admin.getMenus();
+
+    next();
+})
+
 router.get('/', function(req, res, next) {
 
-    res.render('admin/index');
+    res.render('admin/index', {
+        menus: req.menus,
+    });
 });
 
 router.get('/logout', function(req, res, next) {
@@ -60,16 +70,15 @@ router.get('/menus', function(req, res, next) {
 
 router.get('/reservations', function(req, res, next) {
     res.render('admin/reservations', {
-        date: {}
+        date: {},
+        menus: req.menus
     });
 });
 
 router.get('/contacts', function(req, res, next) {
     res.render('admin/contacts', {
+        menus: req.menus
     });
 });
-
-
-
 
 module.exports = router;
