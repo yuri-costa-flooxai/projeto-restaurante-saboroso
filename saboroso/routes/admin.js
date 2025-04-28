@@ -74,20 +74,16 @@ router.get('/emails', function(req, res, next) {
 
 router.get('/menus', function(req, res, next) {
 
-    menus.getMenus().then(data => {
+    menus.getMenus().then((data) => {
         res.render('admin/menus', admin.getParams(req, {
-            data
+            menus: data
         }));
-
-    }).catch(err => {
-        console.log(err);
-        res.render('admin/menus', admin.getParams(req, {
-            data: {}
-        }));
-    });
-
-    
+    })
 });
+
+router.post("/menus", function(req, res, next) {
+    res.send(req.body);
+})
 
 router.get('/reservations', function(req, res, next) {
     res.render('admin/reservations', admin.getParams(req, {
