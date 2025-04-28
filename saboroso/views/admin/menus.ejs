@@ -153,4 +153,31 @@
          window.location.reload();
        })
       })
+      let formUpdate = document.querySelector('#modal-update form');
+    document.querySelectorAll('.btn-update').forEach(btn => {
+      btn.addEventListener('click', e => {
+
+        e.path.find(el => {
+          return (el.tagName.toUpperCase() === 'TR')
+        })
+        let data = JSON.parse(tr.dataset.row);
+
+        for (let name in data) {
+          switch (name) {
+            case 'photo':btn
+
+            break;
+            default:
+            let input = formUpdate.querySelector(`[name="${name}"]`);
+            if (input) input.value = data[name];
+          }
+          formUpdate.querySelector(`[name="${name}"]`).value = data[name];
+        }
+        $('#modal-update').modal('open');
+
+      });
+  
+});
+              
+      
     </script>
