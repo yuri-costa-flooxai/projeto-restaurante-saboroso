@@ -197,3 +197,79 @@
     </div>
 
     <%- include('inc/footer.ejs') %>
+    <script src="/js/hdcode-filereader.js"></script>
+    <script>
+      let formCreate = document.querySelector('#modal-create form');
+      
+      formCreate.save().then(json => {
+        //window.location.reload();
+      }).catch(e => {
+        alert(e);
+      });
+
+      let formCreateData = new FormData(formCreate);
+
+      formCreate.addEventListener('submit', function(e) {
+        e.preventDefault();
+        let formData = new FormData(formCreate);
+        fetch("/admin/menus", {
+          method: "POST",
+          body: formCreateData
+        }).then(response => response.json())
+        .then(data => {
+
+         window.location.reload();
+       })
+      })
+
+      let formUpdate = document.querySelector('#modal-update form');
+
+      document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', e => {
+          
+          if(confirm('Deseja realmente excluir este registro?') == false) return false;
+
+          let tr = e.path.find(el => {
+            return (el.tagName.toUpperCase() === 'TR')
+          })
+          let data = JSON.parse(tr.dataset.row);
+
+          fetch(`/admin"/menus/${data.id}`, {
+            method: "DELETE"
+          })
+          .then(response => response.json())
+          .then(json => {
+            window.location.reload();
+          })
+        });
+      });
+
+      document.querySelectorAll('.btn-update').forEach(btn => {
+      btn.addEventListener('click', e => {
+
+        e.path.find(el => {
+          return (el.tagName.toUpperCase() === 'TR')
+        })
+        let data = JSON.parse(tr.dataset.row);
+
+        console.log(data.id)
+
+        for (let name in data) {
+          switch (name) {
+            case 'photo':
+              formUpdate.querySelector("img").src = '/'+data[name];
+
+            break;
+            default:
+            let input = formUpdate.querySelector(`[name="${name}"]`);
+            if (input) input.value = data[name];
+          }
+          formUpdate.querySelector(`[name="${name}"]`).value = data[name];
+        }
+        $('#modal-update').modal('open');
+
+      });
+  
+});
+
+    </script>
