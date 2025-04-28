@@ -168,14 +168,38 @@
          window.location.reload();
        })
       })
+
       let formUpdate = document.querySelector('#modal-update form');
-    document.querySelectorAll('.btn-update').forEach(btn => {
+
+      document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', e => {
+          
+          if(confirm('Deseja realmente excluir este registro?') == false) return false;
+
+          let tr = e.path.find(el => {
+            return (el.tagName.toUpperCase() === 'TR')
+          })
+          let data = JSON.parse(tr.dataset.row);
+
+          fetch(`/admin"/menus/${data.id}`, {
+            method: "DELETE"
+          })
+          .then(response => response.json())
+          .then(json => {
+            window.location.reload();
+          })
+        });
+      });
+
+      document.querySelectorAll('.btn-update').forEach(btn => {
       btn.addEventListener('click', e => {
 
         e.path.find(el => {
           return (el.tagName.toUpperCase() === 'TR')
         })
         let data = JSON.parse(tr.dataset.row);
+
+        console.log(data.id)
 
         for (let name in data) {
           switch (name) {
