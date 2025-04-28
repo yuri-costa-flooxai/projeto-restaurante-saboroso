@@ -139,7 +139,13 @@
       <!-- /.modal-dialog -->
     </div>
     <%- include('inc/footer.ejs') %>
+    <script src ="/js/hdcode-filereader.js"></script>
+
+    
     <script>
+      new HcodeFileReader("#modal-create input[type=file], #modal-create img");
+      new HcodeFileReader("#modal-create input[type=file], #modal-update img");
+ 
       let formCreate = document.querySelector('#modal-create form');
       formCreate.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -164,7 +170,8 @@
 
         for (let name in data) {
           switch (name) {
-            case 'photo':btn
+            case 'photo':
+              formUpdate.querySelector("img").src = '/'+data[name];
 
             break;
             default:
