@@ -7,6 +7,10 @@ var menus = require('../inc/menus');
 var moment = require('moment');
 var reservations = require('../inc/reservations');
 
+
+moment.locale('pt-br');
+
+
 router.use(function(req, res, next) {
 
     if (['/login'].indexOf(req.url) === -1 && !req.session.user) {

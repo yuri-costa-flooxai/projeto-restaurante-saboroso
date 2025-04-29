@@ -71,7 +71,7 @@
                   <td><%=row.people%></td>
                   <td><%=moment(row.date).format("DD [de] MMMM [de] YYYY")%></td>
                   <td><%=row.time%></td>
-                  <td><button type="button" class="btn btn-xs btn-info btn-update" data-toggle="modal" data-target="#modal-update"><i
+                  <td><button type="button" class="btn btn-xs btn-info btn-update" ><i
                         class="fa fa-pencil"></i> Editar</button>&nbsp;<button type="button" class="btn btn-xs btn-danger btn-delete"><i
                         class="fa fa-trash"></i> Excluir</button></td>
                 </tr>
@@ -200,6 +200,7 @@
 
     <%- include('inc/footer.ejs') %>
     <script src="/js/hdcode-filereader.js"></script>
+    <script src="/js/hdcode-formsave.js"></script>
     <script>
       let formCreate = document.querySelector('#modal-create form');
       
@@ -214,7 +215,7 @@
       formCreate.addEventListener('submit', function(e) {
         e.preventDefault();
         let formData = new FormData(formCreate);
-        fetch("/admin/menus", {
+        fetch("/admin/reservations", {
           method: "POST",
           body: formCreateData
         }).then(response => response.json())
@@ -236,7 +237,7 @@
           })
           let data = JSON.parse(tr.dataset.row);
 
-          fetch(`/admin"/menus/${data.id}`, {
+          fetch(`/admin"/reservations/${data.id}`, {
             method: "DELETE"
           })
           .then(response => response.json())
@@ -259,14 +260,17 @@
         console.log(data.id)
 
         for (let name in data) {
-          switch (name) {
-            case 'photo':
-              formUpdate.querySelector("img").src = '/'+data[name];
 
+          let input = formUpdate.querySelector(`[name="${name}"]`);
+
+          switch (name) {
+            case 'date':
+            if (input) input.value = moment(data[name]).format('YYYY-MM-DD');
             break;
+
             default:
-            let input = formUpdate.querySelector(`[name="${name}"]`);
             if (input) input.value = data[name];
+
           }
           formUpdate.querySelector(`[name="${name}"]`).value = data[name];
         }
