@@ -2,6 +2,22 @@ let conn = require('./db');
 
 module.exports = {
 
+    getReservations() {
+
+        return new Promise((resolve, reject) => {
+
+            conn.query('SELECT * FROM tb_reservations ORDER BY DESC', (err, results) => {
+                if (err) {
+
+                  reject(err);
+                } else {
+
+                  resolve(results);
+                }
+            })
+          })
+      },
+
     render(req, res, error) {
         res.render('reservations', {
             title: 'Reservas - Restaurante Saboroso',

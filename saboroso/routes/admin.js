@@ -99,9 +99,13 @@ router.delete('/menus/:id', function(req, res, next) {
 })
 
 router.get('/reservations', function(req, res, next) {
-    res.render('admin/reservations', admin.getParams(req, {
-        date: {}
-    }));
+
+    reseevations.getReservations().then((data) => {
+        res.render('admin/reservations', admin.getParams(req, {
+            date: {},
+            reservations: data
+        }));
+    })
 });
 router.post("/reservations", function(req, res, next) {
     reservations.delete(req.params.id).then(results => {
