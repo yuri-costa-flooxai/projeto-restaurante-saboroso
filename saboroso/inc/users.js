@@ -181,4 +181,28 @@ module.exports = {
         });
 
     },
+
+    changePassword(req) {
+        return new Promise((resolve, reject) => {
+            if(!req.body.password) {
+                reject('Informe a senha.');
+            } else if(req.body.password !== req.body.passwordConfirm) {
+                reject('Confirme a senha corretamente.');
+            } else {
+                connect.query(`
+                    UPDATE tb_users SET password =? WHERE id =?
+                `, [
+                    req.fields.password,
+                    req.fields.id
+                ], (err, results) => {
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve(results);
+                    }
+                });
+            }
+            
+        });
+    }
 }
