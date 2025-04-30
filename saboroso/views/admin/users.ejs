@@ -154,3 +154,12 @@
   </div>
 
   <%- include("inc/footer.ejs") %> 
+
+  <script src="js/hdcode-formsave.js"></script>
+  <script src="js/hdcode-grid.js"></script>
+  <script>
+    new HcodeGrid({
+      deleteUrl: '/admin/users/${data.id}',
+      deleteMsg: 'Deseja realmente excluir este registro?'
+    })
+  </script>
