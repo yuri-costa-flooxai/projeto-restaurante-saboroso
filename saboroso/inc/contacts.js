@@ -1,56 +1,93 @@
-var conn = require('./db');
+var conn = require("./db");
+
 module.exports = {
 
-    render(req, res, err, success) {
-        res.render('contact', {
-            title: 'Contato - Restaurante Saboroso',
+
+    render(req, res, error, success){
+
+        res.render('contacts', {
+    
+            title: 'Contacts - Restaurante  Saboroso!' ,
             background: 'images/img_bg_3.jpg',
-            h1: 'Entre em Contato',
+            h1: 'Diga um oi!',
             body: req.body,
             error,
             success
+        
+          });
+    },
+    save(fields){
+
+        return new Promise((resolve,reject)=>{
+
+            conn.query(`
+                INSERT INTO tb_contacts (name,email,message)
+                VALUES(?, ?, ?)
+                `,
+                [
+                    fields.name,
+                    fields.email,
+                    fields.message
+            
+                ],
+                (err,results)=>{
+    
+                    if(err){
+                        reject(err);
+                    }
+                    else{
+                        resolve(results);
+                    }
+    
+                });
+
         });
     },
+    getContacts(){
 
-    getContacts () {
-        return new Promise((resolve, reject) => {
-            conn.query('SELECT * FROM tb_contacts ORDER BY id DESC', (err, results) => {
-                if (err) {
+        return new Promise((resolve, reject)=>{
+
+            conn.query(`
+                SELECT * FROM tb_contacts ORDER BY register DESC
+                `, (err, results)=>{
+            
+                  if(err){
+                    
                     reject(err);
-                } else {
-                    resolve(results);
-                }
-            });
-        });
-    },
 
-    delete(id) {
-        return new Promise((resolve, reject) => {
-            conn.query('DELETE FROM tb_contacts WHERE id = ?', [
+                  }
+
+                    resolve(results);
+            
+                });
+
+        });
+
+    },
+    delete(id){
+
+        return new Promise((resolve,reject)=>{
+  
+          conn.query(`
+            DELETE FROM tb_contacts WHERE id = ?
+            `,[
                 id
-            ], (err, results) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(results);
+              ],(err,results)=>{
+  
+                if(err){
+  
+                  reject(err)
+                }else{
+  
+                  resolve(results)
                 }
-            });
-        });
-    },
+  
+              }
+          )
+  
+        })
+  
+      }
 
-    save(fields) {
-        return new Promise((resolve, reject) => {
 
-            conn.query('INSERT INTO tb_contacts (name, email, message) VALUES (?, ?, ?)'
-                , [
-                    fields.name, fields.email, fields.message
-                ], (err, results) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(results);
-                }
-            });
-        });
-    }
 }

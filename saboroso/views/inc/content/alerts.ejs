@@ -1,10 +1,11 @@
-<% if (body.error) { %>
+
+<% if(typeof error === "string"){%>
     <div class="alert alert-danger">
-        <%= body.error %>
+        <%= error %>
     </div>
-<% } %>
-<% if (body.success) { %>
-    <div class="alert alert-success">
-        <%= body.success %>
-    </div>
-<% } %>
+    <% } %>
+    <% if(typeof success === "string"){%>
+        <div class="alert alert-success">
+            <%= success %>
+        </div>
+        <% } %>
