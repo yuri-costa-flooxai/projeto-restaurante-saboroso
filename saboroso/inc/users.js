@@ -33,4 +33,152 @@ module.exports = {
             });
         });
     },
+    usersDelete(req) {
+
+        return new Promise((s, r) => {
+
+            if (!req.params.id) {
+                f('Informe o ID.');
+            } else {
+
+                conn.query(`
+                DELETE FROM tb_users WHERE id = ?
+            `, [
+                        req.params.id
+                    ], (err, results) => {
+
+                        if (err) {
+                            f(err);
+                        } else {
+                            io.emit('reservations update');
+                            s(results);
+                        }
+
+                    });
+
+            }
+
+        });
+
+    },
+    usersPassword(req) {
+
+        return new Promise((s, f) => {
+
+            let form = new formidable.IncomingForm();
+
+            form.parse(req, function (err, fields, files) {
+
+                if (err) {
+                    f(err);
+                } else {
+
+                    if (!fields.password) {
+                        f('Preencha a senha.');
+                    } else if (fields.password !== fields.passwordConfirm) {
+                        f('Confirme a senha corretamente.');
+                    } else {
+
+                        conn.query(`
+                        UPDATE tb_users SET password = ? WHERE id = ?
+                    `, [
+                                fields.password,
+                                fields.id
+                            ], (err, results) => {
+
+                                if (err) {
+                                    f(err);
+                                } else {
+                                    s(results);
+                                }
+
+                            });
+
+                    }
+
+                }
+
+            });
+
+        });
+
+    },
+    users() {
+        return new Promise((s, f) => {
+
+            conn.query(
+                `
+                SELECT * FROM tb_users ORDER BY name
+            `,
+                (err, results) => {
+
+                    if (err) {
+                        f(err);
+                    } else {
+                        s(results);
+                    }
+
+                }
+            );
+
+        });
+    },
+    usersSave(req) {
+
+        return new Promise((s, f) => {
+
+            let form = new formidable.IncomingForm();
+
+            form.parse(req, function (err, fields, files) {
+
+                let query, params;
+
+                if (parseInt(fields.id) > 0) {
+
+                    query = `
+                            UPDATE tb_users
+                            SET name = ?, email = ?
+                            WHERE id = ?
+                        `;
+                    params = [
+                        fields.name,
+                        fields.email,
+                        fields.id
+                    ];
+
+
+                } else {
+
+                    query = `
+                            INSERT INTO tb_users (name, email, password)
+                            VALUES(?, ?, ?)
+                        `;
+                    params = [
+                        fields.name,
+                        fields.email,
+                        fields.password
+                    ];
+
+                }
+
+                conn.query(query, params, (err, results) => {
+
+                    if (err) {
+                        f(err);
+                    } else {
+
+                        io.emit('reservations update', fields);
+
+                        s(fields, results);
+
+                    }
+
+                }
+                );
+
+            });
+
+        });
+
+    },
 }
